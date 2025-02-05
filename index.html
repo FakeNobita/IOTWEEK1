@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IOT NPTEL WEEK-1</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e5e5;
+        }
+
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #333;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 12px;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+        }
+
+        .option:hover {
+            background-color: #f8f8f8;
+        }
+
+        .option.selected {
+            border-color: #3b82f6;
+        }
+
+        .option.correct {
+            background-color: #ecfdf5;
+        }
+
+        .option.wrong {
+            background-color: #fef2f2;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 12px;
+        }
+
+        .feedback {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e5e5e5;
+            display: none;
+        }
+
+        .feedback.visible {
+            display: block;
+        }
+
+        .result-icon {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .result-icon.correct {
+            color: #059669;
+        }
+
+        .result-icon.wrong {
+            color: #dc2626;
+        }
+
+        .explanation {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 24px;
+        }
+
+        .score {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .button {
+            background-color: #3b82f6;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.2s;
+        }
+
+        .button:hover {
+            background-color: #2563eb;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>IOT NPTEL WEEK-1</h1>
+        <div id="quiz-container"></div>
+        <div class="controls">
+            <div id="score" class="score"></div>
+            <button id="submit-btn" class="button">Submit Answers</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                id: 1,
+                question: "IoT stands for ____________.",
+                options: ["Internet of Tasks", "Internet of Tuples", "Internet of Things", "None of these"],
+                correctAnswer: 2,
+                explanation: "IoT stands for Internet of Things."
+            },
+            {
+                id: 2,
+                question: "Which of the following technologies have unified and has resulted in the evolution of IoT?",
+                options: ["High-power embedded systems", "Super Computing", "Engine Technology", "None of these"],
+                correctAnswer: 3,
+                explanation: "None of these technologies alone led to IoT evolution."
+            },
+            {
+                id: 3,
+                question: "Which of the following are the enables of IoT?",
+                options: ["RFID", "Nanotechnology", "Sensors", "All of these"],
+                correctAnswer: 3,
+                explanation: "All of these - RFID, Nanotechnology, and Sensors are enablers of IoT."
+            },
+            {
+                id: 4,
+                question: "Which of the following is NOT a function of an IoT LAN?",
+                options: ["Long range communication, global", "World wide connections", "Both (a) and (b)", "Neither (a) Nor (b)"],
+                correctAnswer: 2,
+                explanation: "Both long range communication and worldwide connections are not functions of IoT LAN."
+            },
+            {
+                id: 5,
+                question: "The integration of existing devices, smart devices, and constrained nodes in a singular framework is one of the reasons for the address crunch in IoT.",
+                options: ["True", "False"],
+                correctAnswer: 0,
+                explanation: "This statement is true."
+            },
+            {
+                id: 6,
+                question: "In Multi-homing, a node/network is connected to a single network for improved reliability.",
+                options: ["True", "False"],
+                correctAnswer: 1,
+                explanation: "False - Multi-homing involves multiple networks, not a single network."
+            },
+            {
+                id: 7,
+                question: "Which of the following is/are the approach/approaches for multi-homing?",
+                options: ["Proxy-based approach", "Gateway-based approach", "Both (a) and (b)", "None of these"],
+                correctAnswer: 2,
+                explanation: "Both proxy-based and gateway-based approaches are used for multi-homing."
+            },
+            {
+                id: 8,
+                question: "IPv6 uses ____________ notation for its representation.",
+                options: ["Hexadecimal", "Binary", "Decimal", "None of these"],
+                correctAnswer: 0,
+                explanation: "IPv6 uses hexadecimal notation for its representation."
+            },
+            {
+                id: 9,
+                question: "The parameters sensed by a sensor may be sent to the cloud for further processing.",
+                options: ["False", "True"],
+                correctAnswer: 1,
+                explanation: "True - Sensor data can be sent to the cloud for processing."
+            },
+            {
+                id: 10,
+                question: "The IPv6 notation uses ___________________ number of bits to represent an address.",
+                options: ["64", "128", "Both (a) and (b)", "Neither (a) nor (b)"],
+                correctAnswer: 1,
+                explanation: "IPv6 uses 128 bits to represent an address."
+            },
+            {
+                id: 11,
+                question: "A sensor is -",
+                options: ["Only sensitive to the measured property", "Insensitive to any other property that what the sensor is made to sense", "Both (a) and (b)", "None of these"],
+                correctAnswer: 2,
+                explanation: "A sensor is both sensitive to its measured property and insensitive to other properties."
+            },
+            {
+                id: 12,
+                question: "We classify sensors based on -",
+                options: ["Output", "Data type", "Both (a) and (b)", "None of these"],
+                correctAnswer: 2,
+                explanation: "Sensors are classified based on both output and data type."
+            },
+            {
+                id: 13,
+                question: "Which of the following is correct statement?",
+                options: ["Controlling AC loads using low DC signals", "Relays are electromechanical", "Relays are actuators", "All of these"],
+                correctAnswer: 3,
+                explanation: "All of these statements about relays are correct."
+            },
+            {
+                id: 14,
+                question: "Based on the output, sensors are classified as ____________________.",
+                options: ["Analog", "Digital", "Both (a) and (b)", "Neither (a) nor (b)"],
+                correctAnswer: 2,
+                explanation: "Sensors can be classified as both analog and digital based on their output."
+            },
+            {
+                id: 15,
+                question: "Soft actuators are -",
+                options: ["Polymer-based", "Mechanical", "Electromechanical", "None of these"],
+                correctAnswer: 0,
+                explanation: "Soft actuators are polymer-based devices."
+            }
+        ];
+
+        let selectedAnswers = {};
+        let submitted = false;
+
+        function createQuiz() {
+            const quizContainer = document.getElementById('quiz-container');
+            
+            questions.forEach(question => {
+                const questionCard = document.createElement('div');
+                questionCard.className = 'question-card';
+                
+                questionCard.innerHTML = `
+                    <div class="question-text">Q${question.id}. ${question.question}</div>
+                    <div class="options-container">
+                        ${question.options.map((option, index) => `
+                            <label class="option" data-question="${question.id}" data-option="${index}">
+                                <input type="radio" name="question${question.id}" value="${index}">
+                                ${option}
+                            </label>
+                        `).join('')}
+                    </div>
+                    <div class="feedback" id="feedback-${question.id}">
+                        <div class="result-icon">
+                            <span class="icon"></span>
+                            <span class="result-text"></span>
+                        </div>
+                        <div class="explanation">${question.explanation}</div>
+                    </div>
+                `;
+                
+                quizContainer.appendChild(questionCard);
+            });
+
+            document.querySelectorAll('.option').forEach(option => {
+                option.addEventListener('click', handleOptionSelect);
+            });
+
+            document.getElementById('submit-btn').addEventListener('click', handleSubmit);
+        }
+
+        function handleOptionSelect(event) {
+            if (submitted) return;
+
+            const questionId = parseInt(event.currentTarget.dataset.question);
+            const optionIndex = parseInt(event.currentTarget.dataset.option);
+
+            selectedAnswers[questionId] = optionIndex;
+
+            const questionOptions = document.querySelectorAll(`.option[data-question="${questionId}"]`);
+            questionOptions.forEach(option => {
+                option.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+
+            const radioButton = event.currentTarget.querySelector('input[type="radio"]');
+            radioButton.checked = true;
+        }
+
+        function handleSubmit() {
+            if (Object.keys(selectedAnswers).length < questions.length) {
+                alert("Please answer all questions before submitting!");
+                return;
+            }
+
+            submitted = true;
+            let score = 0;
+
+            questions.forEach(question => {
+                const isCorrect = selectedAnswers[question.id] === question.correctAnswer;
+                if (isCorrect) score++;
+
+                const feedback = document.getElementById(`feedback-${question.id}`);
+                feedback.classList.add('visible');
+
+                const resultIcon = feedback.querySelector('.result-icon');
+                const resultText = feedback.querySelector('.result-text');
+                
+                if (isCorrect) {
+                    resultIcon.classList.add('correct');
+                    resultText.textContent = 'Correct Answer +1';
+                } else {
+                    resultIcon.classList.add('wrong');
+                    resultText.textContent = 'Wrong Answer +0';
+                }
+
+                const options = document.querySelectorAll(`.option[data-question="${question.id}"]`);
+                options.forEach((option, index) => {
+                    if (index === question.correctAnswer) {
+                        option.classList.add('correct');
+                    } else if (index === selectedAnswers[question.id]) {
+                        option.classList.add('wrong');
+                    }
+                });
+            });
+
+            document.getElementById('score').textContent = `Score: ${score}/${questions.length}`;
+
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.textContent = 'Try Again';
+            submitBtn.removeEventListener('click', handleSubmit);
+            submitBtn.addEventListener('click', resetQuiz);
+        }
+
+        function resetQuiz() {
+            location.reload();
+        }
+
+        createQuiz();
+    </script>
+</body>
+</html>
